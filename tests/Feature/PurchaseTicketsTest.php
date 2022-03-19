@@ -44,10 +44,6 @@ class PurchaseTicketsTest extends TestCase
         $order = $concert->orders()->where( 'email', 'john@example.com' )->first();
         $this->assertNotNull( $order );
         $this->assertEquals( 3, $order->tickets()->count() );
-
-//        $this->assertTrue( $concert->orders->contains( function ($order) {
-//            return $order->email == 'john@example.com';
-//        } ) );
-
     }
+
 }

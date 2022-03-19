@@ -28,8 +28,22 @@ class Concert extends Model
         return $query->whereNotNull('published_at');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function orders() {
         return $this->hasMany( Order::class );
     }
 
+    public function orderTickets( $email, $ticketsQuantity ) {
+
+        $order = $this->orders()->create( array( 'email' => $email ) );
+
+        for( $i = 0; $i < $ticketsQuantity; $i++ ) {
+
+            $order->tickets()->create( array() );
+        }
+
+        return $order;
+    }
 }
