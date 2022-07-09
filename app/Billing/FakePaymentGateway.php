@@ -17,13 +17,16 @@ class FakePaymentGateway implements PaymentGateway
         return "valid-token";
     }
 
-    public function charge( $amount, $token ) {
-
+    public function charge( $amount, $token )
+    {
+        if( $token !== $this->getValidTestToken() ) {
+            throw new PaymentFailedException;
+        }
         $this->charges[] = $amount;
     }
 
-    public function totalCharges() {
-
+    public function totalCharges()
+    {
         return $this->charges->sum();
     }
 
