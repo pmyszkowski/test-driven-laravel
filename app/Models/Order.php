@@ -20,8 +20,7 @@ class Order extends Model
 
         /** @var Ticket $ticket */
         foreach ($this->tickets as $ticket) {
-
-            $ticket->update(['order_id' => null]);
+            $ticket->release();
         }
 
         $this->delete();
