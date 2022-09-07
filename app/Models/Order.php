@@ -11,6 +11,21 @@ class Order extends Model
 
     protected $guarded = array();
 
+    static public function forTickets($tickets, $email, $amount) {
+
+        /** @var Order $order */
+        $order = self::create( array(
+            'email' => $email,
+            'amount' => $amount,
+        ) );
+
+        foreach ($tickets as $ticket) {
+            $order->tickets()->save($ticket);
+        }
+
+        return $order;
+    }
+
     public function concert() {
 
         return $this->belongsTo(Concert::class );
