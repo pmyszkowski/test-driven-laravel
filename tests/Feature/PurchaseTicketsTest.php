@@ -63,6 +63,19 @@ class PurchaseTicketsTest extends TestCase
     }
 
     /** @test */
+    function cannot_purchase_tickets_another_customer_is_already_trying_to_purchase()
+    {
+        $concert = Concert::factory()->published()->unpublished()->create()->addTickets(3);
+
+        $response = $this->orderTickets($concert, array(
+            'email' => 'personA@example.com',
+            'ticket_quantity' => 3,
+            'payment_token' => $this->paymentGateway->getValidTestToken(),
+        ));
+
+    }
+
+    /** @test */
     function cannot_purchase_tickets_to_unpublished_concert()
     {
 //        $this->withoutExceptionHandling();
