@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Carbon;
 
 class Concert extends Model
 {
@@ -60,6 +61,12 @@ class Concert extends Model
         $tickets = $this->findTickets($ticketQuantity);
 
         return $this->createOrder($email, $tickets);
+    }
+
+    public function reserveTickets($quantity) {
+        return $this->findTickets($quantity)->each(function ($ticket) {
+            $ticket->reserve();
+        });
     }
 
     public function findTickets($quantity) {
