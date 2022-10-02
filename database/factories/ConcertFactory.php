@@ -32,7 +32,7 @@ class ConcertFactory extends Factory
     /**
      * Indicate that the model is published.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return Factory
      */
     public function published()
     {
@@ -46,7 +46,7 @@ class ConcertFactory extends Factory
     /**
      * Indicate that the model is not published.
      *
-     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     * @return Factory
      */
     public function unpublished()
     {

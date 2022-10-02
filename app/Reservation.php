@@ -8,14 +8,26 @@ class Reservation
 {
 
     private $tickets;
+    private $email;
 
-    function __construct(Collection $tickets) {
+    function __construct(Collection $tickets, $email) {
 
         $this->tickets = $tickets;
+        $this->email = $email;
     }
-    public function totalCost() {
-
+    public function totalCost()
+    {
         return $this->tickets->sum('price');
+    }
+
+    public function tickets()
+    {
+        return $this->tickets;
+    }
+
+    public function email()
+    {
+        return $this->email;
     }
 
     public function cancel()
@@ -28,4 +40,5 @@ class Reservation
 //            $ticket->release();
 //        });
     }
+
 }

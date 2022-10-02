@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Reservation;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -26,6 +27,19 @@ class Order extends Model
         return $order;
     }
 
+    public static function fromReservation(Reservation $reservation)
+    {
+        /** @var Order $order */
+        $order = self::create( array(
+            'email' => $reservation->email(),
+            'amount' => $reservation->totalCost(),
+        ) );
+
+        $order->tickets()->saveMany($reservation->tickets());
+
+        return $order;
+    }
+
     public function concert() {
 
         return $this->belongsTo(Concert::class );
@@ -34,16 +48,6 @@ class Order extends Model
     public function tickets() {
 
         return $this->hasMany( Ticket::class );
-    }
-
-    public function cancel() {
-
-        /** @var Ticket $ticket */
-        foreach ($this->tickets as $ticket) {
-            $ticket->release();
-        }
-
-        $this->delete();
     }
 
     public function toArray()
