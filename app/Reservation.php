@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Models\Order;
 use Illuminate\Support\Collection;
 
 class Reservation
@@ -39,6 +40,13 @@ class Reservation
 //        $this->tickets->each(function ($ticket) {
 //            $ticket->release();
 //        });
+    }
+
+    public function complete($paymentGateway, $paymentToken)
+    {
+        $paymentGateway->charge( $this->totalCost(), $paymentToken );
+
+        return Order::forTickets($this->tickets(), $this->email(), $this->totalCost());
     }
 
 }
