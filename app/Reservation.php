@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Billing\PaymentGateway;
 use App\Models\Order;
 use Illuminate\Support\Collection;
 
@@ -11,8 +12,8 @@ class Reservation
     private $tickets;
     private $email;
 
-    function __construct(Collection $tickets, $email) {
-
+    function __construct(Collection $tickets, $email)
+    {
         $this->tickets = $tickets;
         $this->email = $email;
     }
@@ -42,9 +43,9 @@ class Reservation
 //        });
     }
 
-    public function complete($paymentGateway, $paymentToken)
+    public function complete(PaymentGateway $paymentGateway, $paymentToken)
     {
-        $paymentGateway->charge( $this->totalCost(), $paymentToken );
+        $paymentGateway->charge($this->totalCost(), $paymentToken);
 
         return Order::forTickets($this->tickets(), $this->email(), $this->totalCost());
     }
