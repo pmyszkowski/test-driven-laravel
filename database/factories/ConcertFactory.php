@@ -13,7 +13,7 @@ class ConcertFactory extends Factory
      *
      * @return array
      */
-    public function definition()
+    public function definition(): array
     {
         return [
             'title' => 'Example Band',
@@ -34,7 +34,7 @@ class ConcertFactory extends Factory
      *
      * @return Factory
      */
-    public function published()
+    public function published(): Factory
     {
         return $this->state(function (array $attributes) {
             return [
@@ -48,7 +48,7 @@ class ConcertFactory extends Factory
      *
      * @return Factory
      */
-    public function unpublished()
+    public function unpublished(): Factory
     {
         return $this->state(function (array $attributes) {
             return [

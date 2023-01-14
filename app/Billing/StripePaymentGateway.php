@@ -3,18 +3,20 @@
 namespace App\Billing;
 
 use Stripe\StripeClient;
+Use Stripe\Exception\InvalidRequestException;
 
 class StripePaymentGateway implements PaymentGateway
 {
 
     private StripeClient $stripe;
+    private array $charges;
 
     public function __construct($apiKey) {
 
         $this->stripe  = new StripeClient($apiKey);
     }
 
-    public function validToken()
+    public function validToken(): string
     {
         $token = $this->stripe->tokens->create([
             'card' => [
@@ -30,32 +32,28 @@ class StripePaymentGateway implements PaymentGateway
 
     public function charge($amount, $token)
     {
-        $this->stripe->charges->create([
-            'amount' => $amount,
-            'source' => $token,
-            'currency' => 'usd',
-        ]);
+        try {
+            $this->stripe->charges->create([
+                'amount' => $amount,
+                'source' => $token,
+                'currency' => 'usd',
+            ]);
+        }
+        // by catching Stripe exception and throwing our own exception
+        // we are able to isolate the rest of our app from knowing that we are using other library under the hood
+        catch (InvalidRequestException $e) {
+            throw new PaymentFailedException();
+        }
 
         $this->charges[] = $amount;
     }
 
-    public function lastChargeBefore($endingBefore)
-    {
-        return $this->lastCharge($endingBefore);
-    }
-
     /**
-     * @param $endingBefore
      * @return mixed
      */
-    public function lastCharge($endingBefore = null)
+    public function lastCharge(): mixed
     {
-        if (isset($endingBefore))
-            $lastCharge = $this->chargesBefore($endingBefore, 1);
-        else
-            $lastCharge = $this->charges(1);
-
-        return $lastCharge[0];
+        return $this->charges(1)[0];
     }
 
     public function chargesBefore($endingBefore, $limit = 10)
